@@ -32,7 +32,8 @@ def organize (folder_path: Path, preview: bool) -> None:
         if item.is_file():
             category = get_category(item.suffix)
             target_folder = folder_path / category
-            target_folder.mkdir(exist_ok=True)
+            if preview:
+                target_folder.mkdir(exist_ok=True)
             target_file = target_folder / item.name
 
             c = 1
@@ -51,9 +52,16 @@ def organize (folder_path: Path, preview: bool) -> None:
 def main():
     folder_input = input("Enter folder path: ").strip()
     folder_path = Path(folder_input)
-    preview = input("preview? (y/n): ").strip().lower()
-    preview_bool = preview == "y"
-    organize(folder_path, preview_bool)
+    print("\nPreview:")
+    organize(folder_path, True)
+
+    confirm = input("\nDo you want to organize these files? (y/n): ").strip().lower()
+
+    if confirm == "y":
+        print("\nOrganizing files...")
+        organize(folder_path, False)
+    else:
+        print("\nOperation cancelled.")
 
 if __name__ == "__main__":
     main()
